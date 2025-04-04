@@ -79,43 +79,13 @@ function DonationCard({ onDonate, onLearnMore }: { onDonate: (amount: string) =>
   );
 }
 
-function ThankYouCard({ onClose }: { onClose: () => void }) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Thank You!</CardTitle>
-        <CardDescription>
-          Your support helps the ACLU defend constitutional rights
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p className="text-sm">
-          The ACLU dares to create a more perfect union — beyond one person, party, or side. 
-          Their mission is to realize the promise of the United States Constitution for all 
-          and expand the reach of its guarantees.
-        </p>
-      </CardContent>
-      <CardFooter>
-        <Button onClick={onClose} className="w-full">Close</Button>
-      </CardFooter>
-    </Card>
-  );
-}
 
 export default function Frame() {
   const { isSDKLoaded, sdk } = useFrameSDK();
-  const [showThankYou, setShowThankYou] = useState(false);
 
-  const handleDonate = useCallback((amount) => {
-    // In a real implementation, this would connect to a wallet and process the transaction
-    // For this prototype, we'll just show the thank you screen
-    setShowThankYou(true);
-    
-    // In a real implementation, you would use something like:
-    // sdk.actions.tx({
-    //   to: "0xACLU_WALLET_ADDRESS",
-    //   value: ethers.utils.parseEther(amount),
-    // });
+  const handleDonate = useCallback((amount: string) => {
+    // Redirect to Every.org's ACLU donation page with the selected amount
+    sdk.actions.openUrl(`https://www.every.org/aclu?viewport=desktop&donateTo=aclu#/donate?amount=${amount}`);
   }, []);
 
   const handleLearnMore = useCallback(() => {
@@ -132,11 +102,7 @@ export default function Frame() {
 
   return (
     <div className="w-[300px] mx-auto py-2 px-2">
-      {showThankYou ? (
-        <ThankYouCard onClose={handleClose} />
-      ) : (
-        <DonationCard onDonate={handleDonate} onLearnMore={handleLearnMore} />
-      )}
+      <DonationCard onDonate={handleDonate} onLearnMore={handleLearnMore} />
     </div>
   );
 }
