@@ -44,6 +44,7 @@ function DonationCard({ onDonate, onLearnMore, onClose }: { onDonate: (amount: s
           
           <div className="flex flex-col space-y-2">
             <Label htmlFor="amount">Donation Amount (ETH)</Label>
+            <p className="text-xs text-gray-500 mb-2">Supports cryptocurrency donations via Every.org</p>
             <div className="flex space-x-2">
               {["0.01", "0.05", "0.1"].map((amount) => (
                 <Button 
@@ -65,7 +66,7 @@ function DonationCard({ onDonate, onLearnMore, onClose }: { onDonate: (amount: s
           className="w-full bg-red-500 hover:bg-red-600" 
           onClick={() => onDonate(donationAmount)}
         >
-          Donate {donationAmount} ETH to ACLU
+          Donate {donationAmount} ETH via Every.org
         </Button>
         <Button 
           variant="outline" 
@@ -93,7 +94,7 @@ export default function Frame() {
 
   const handleDonate = useCallback((amount: string) => {
     // Redirect to Every.org's ACLU donation page with the selected amount
-    sdk.actions.openUrl(`https://www.every.org/aclu/donate?amount=${amount}&utm_source=frame`);
+    sdk.actions.openUrl(`https://www.every.org/aclu/frame/donate?donationAmount=${amount}&currency=ETH&cause=ACLU&utm_source=frame&utm_medium=frame`);
   }, [sdk]);
 
   const handleLearnMore = useCallback(() => {
