@@ -13,7 +13,7 @@ import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { useFrameSDK } from "~/hooks/useFrameSDK";
 
-function DonationCard({ onDonate, onLearnMore }: { onDonate: (amount: string) => void; onLearnMore: () => void }) {
+function DonationCard({ onDonate, onLearnMore, onClose }: { onDonate: (amount: string) => void; onLearnMore: () => void; onClose: () => void }) {
   const [donationAmount, setDonationAmount] = useState("10");
   
   return (
@@ -74,6 +74,14 @@ function DonationCard({ onDonate, onLearnMore }: { onDonate: (amount: string) =>
         >
           Learn More
         </Button>
+        <Button 
+          variant="ghost" 
+          className="w-full text-gray-500 hover:text-gray-700 mt-2" 
+          onClick={onClose}
+          size="sm"
+        >
+          Close
+        </Button>
       </CardFooter>
     </Card>
   );
@@ -85,11 +93,11 @@ export default function Frame() {
 
   const handleDonate = useCallback((amount: string) => {
     // Redirect to Every.org's ACLU donation page with the selected amount
-    sdk.actions.openUrl(`https://www.every.org/aclu?viewport=desktop&donateTo=aclu#/donate?amount=${amount}`);
-  }, []);
+    sdk.actions.openUrl(`https://www.every.org/aclu/donate?amount=${amount}&utm_source=frame`);
+  }, [sdk]);
 
   const handleLearnMore = useCallback(() => {
-    sdk.actions.openUrl("https://www.every.org/aclu");
+    sdk.actions.openUrl("https://www.every.org/aclu/about?utm_source=frame");
   }, [sdk]);
 
   const handleClose = useCallback(() => {
@@ -102,7 +110,11 @@ export default function Frame() {
 
   return (
     <div className="w-[300px] mx-auto py-2 px-2">
-      <DonationCard onDonate={handleDonate} onLearnMore={handleLearnMore} />
+      <DonationCard 
+        onDonate={handleDonate} 
+        onLearnMore={handleLearnMore} 
+        onClose={handleClose}
+      />
     </div>
   );
 }
